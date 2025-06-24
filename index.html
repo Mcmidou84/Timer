@@ -4,26 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timer en JavaScript</title>
+    <style>
+        .centered {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body {
+            background-color: #FADA7A;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+        }
+
+        img.static {
+            height: 120px;
+        }
+
+        #timer-container {
+            position: relative;
+            height: 150px;
+            width: 100%;
+        }
+
+        #timer {
+            font-size: 2em;
+            cursor: pointer;
+            display: flex;
+            align-items: baseline;
+        }
+
+        #finished-gif {
+            position: absolute;
+            height: 150px;
+            display: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #578FCA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #3674B5;
+        }
+
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 50px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
-<body>
-    <h1>Mon Timer</h1>
-    <div id="timer">0</div>
-    <button onclick="startTimer(10)">Démarrer le Timer</button>
+<body class="centered">
+    <img class="static" src="assets/images/tea.gif" alt="Tea GIF"/>
+    <h1>Take your time!</h1>
+    <div>
+        <input type="number" id="secondsInput" placeholder="10" value="10" min="1">
+        <button onclick="startTimer()">Start Timer</button>
+    </div>
+    <div id="timer-container" class="centered">
+        <div id="timer" onclick="resetTimer()"><span id="timer-value">0</span> s</div>
+        <img id="finished-gif" class="static" src="assets/images/tada.gif" alt="Finished GIF"/>
+    </div>
 
     <script>
-        function startTimer(seconds) {
-            let timeLeft = seconds;
-            const timerElement = document.getElementById('timer');
+        let timerInterval;
 
-            const timer = setInterval(() => {
+        function toggleDisplay(showElement, hideElement) {
+            showElement.style.display = 'flex';
+            hideElement.style.display = 'none';
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+
+            let timeLeft = parseInt(document.getElementById('secondsInput').value);
+
+            if (isNaN(timeLeft) || timeLeft < 1) {
+                alert("Please enter a valid number of seconds.");
+                return;
+            }
+
+            const timerValueElement = document.getElementById('timer-value');
+            const timerElement = document.getElementById('timer');
+            const finishedGif = document.getElementById('finished-gif');
+
+            toggleDisplay(timerElement, finishedGif);
+
+            timerInterval = setInterval(() => {
                 timeLeft--;
-                timerElement.textContent = timeLeft;
+                timerValueElement.textContent = timeLeft;
 
                 if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    timerElement.textContent = "Terminé!";
+                    clearInterval(timerInterval);
+                    toggleDisplay(finishedGif, timerElement);
                 }
             }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            const timerValueElement = document.getElementById('timer-value');
+            const timerElement = document.getElementById('timer');
+            const finishedGif = document.getElementById('finished-gif');
+
+            timerValueElement.textContent = "0";
+            toggleDisplay(timerElement, finishedGif);
         }
     </script>
 </body>
