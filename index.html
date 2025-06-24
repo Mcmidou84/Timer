@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer en JavaScript</title>
+</head>
+<body>
+    <h1>Mon Timer</h1>
+    <div id="timer">0</div>
+    <button onclick="startTimer(10)">Démarrer le Timer</button>
+
+    <script>
+        function startTimer(seconds) {
+            let timeLeft = seconds;
+            const timerElement = document.getElementById('timer');
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerElement.textContent = "Terminé!";
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
